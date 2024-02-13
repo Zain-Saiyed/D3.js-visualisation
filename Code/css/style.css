@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+}
+
+.header text {
+    font-size: 17px;
+    fill: #67655b;
+    text-anchor: middle;
+}
+
+.footer text {
+    font-size: 17px;
+    fill: #67655b;
+    text-anchor: middle;
+}
