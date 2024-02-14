@@ -103,6 +103,7 @@ function create_doughnut_chart_7(svg, value, label, chart_num, base_pie, base_ar
   // Display percentage in the middle of the chart
   chart_group.append("text")
     .text(value + "%")
+    .attr("class","chart-7-percentage-label")
     .attr("y", 10)  // y padding, adjusting to center of chart
     .style("font-size", inner_text_font_size)
     .style("font-weight", inner_text_font_weight)
@@ -112,11 +113,14 @@ function create_doughnut_chart_7(svg, value, label, chart_num, base_pie, base_ar
   // Display label below the chart
   chart_group.append("text")
   .text(label)
+  .attr("class","chart-7-chart-label")
   .attr("y", outer_chart_radius+20+10)
   .style("font-size", chart_label_font_size)
   .style("font-weight", chart_label_font_weight)
   .style("text-anchor", "middle")
   .style("fill", chart_label_font_color);
+
+  return chart_group;
 }
 
 

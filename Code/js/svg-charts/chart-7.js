@@ -51,7 +51,7 @@ chart_data_promise.then(result => {
     var base_arc_gen = d3.arc().innerRadius(inner_chart_radius).outerRadius(outer_chart_radius);
 
     inner_text_font_size = "25px"
-    inner_text_font_weight = chart_label_font_weight = "bold"
+    inner_text_font_weight = chart_label_font_weight = "normal"
     inner_text_font_color = chart_label_font_color = secondary_text_color_accent
 
     chart_label_font_size = "20px"
@@ -92,11 +92,33 @@ chart_data_promise.then(result => {
     x = x+150
     y = y
 
-    create_doughnut_chart_7(chart7_svg, value, label, (chart_num+1), 
+    chart_group = create_doughnut_chart_7(chart7_svg, value, label, (chart_num+1), 
         base_pie_gen, base_arc_gen, pie_colors, 
         x, y, 
         inner_text_font_size, inner_text_font_weight, inner_text_font_color, 
         chart_label_font_size, chart_label_font_weight, chart_label_font_color,
         outer_chart_radius)
 
+
+    chart7_svg.selectAll("g")
+        .on("mouseover", function () {
+            // increase font size and weight
+            d3.select(this).selectAll(".chart-7-percentage-label")
+                .style("font-size", "28px")
+                .style("font-weight", "bold");
+            
+            d3.select(this).select(".chart-7-chart-label")
+                .style("font-size","23px")
+                .style("font-weight", "bold");
+        })
+        .on("mouseout", function () {
+            // reset font size and weight
+            d3.select(this).selectAll(".chart-7-percentage-label")
+                .style("font-size", "25px")
+                .style("font-weight", "normal");
+
+            d3.select(this).select(".chart-7-chart-label")
+                .style("font-size","20px")
+                .style("font-weight", "normal");
+        });
 });

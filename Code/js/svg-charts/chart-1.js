@@ -30,15 +30,9 @@ chart_data_promise.then(result => {
         "34px",
         primary_text_color_accent);
 
-    var svgWidth = 600;
-    var svgHeight = 200;
     // Chart radii
     var outer_chart_radius = 90;
     var inner_chart_radius = outer_chart_radius-30;
-
-    var chartGap = 30;
-    var centerX = svgWidth / 2;
-    var centerY = svgHeight / 2;
 
     var all_arc_pieces = Array.from(motivator_values);
     var all_arc_labels = Array.from(motivator_labels);
@@ -52,8 +46,8 @@ chart_data_promise.then(result => {
     .domain([min_value, max_value]) // value range
     .range([0, bar_color_palette.length - 1]); // color palette indexes range
 
-    var chart_x = centerX-90;
-    var chart_y = centerY+770;
+    var chart_x = (300) - 90;
+    var chart_y = (100) + 770;
     // Create a group for the doughnut charts
     var chart_group = chart1_svg.append("g")
         .attr("transform", "translate(" + (chart_x) + "," + (chart_y) + ")");
@@ -184,14 +178,13 @@ chart_data_promise.then(result => {
 
 
     // Add Interactivity:
-
     // Upon hovering increase opacity else decrease 
     pie_chart_arcs
-    .on('mouseover', function (event, d) {
-        d3.select(this).select('path').attr('opacity', 1);
-    })
-    .on('mouseout', function (event, d) {
-        // base opacity
-        d3.select(this).select('path').attr('opacity', 0.9);
-    });
+        .on('mouseover', function (event, d) {
+            d3.select(this).select('path').attr('opacity', 1).attr("stroke","#1c1c1c").attr("stroke-width",2);
+        })
+        .on('mouseout', function (event, d) {
+            // base opacity
+            d3.select(this).select('path').attr('opacity', 0.9).attr("stroke","").attr("stroke-width",0);
+        });
 });

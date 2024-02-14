@@ -45,7 +45,7 @@ chart_data_promise.then(result => {
     .attr("y",new_y+20);
 
   // Creating group to include the bars
-  var barGroup = chart4_svg.append("g");
+  var chart_group = chart4_svg.append("g");
 
   // Get maximum and minimum values in our data
   var max_value = d3.max(values);
@@ -57,7 +57,7 @@ chart_data_promise.then(result => {
     .range([0, bar_color_palette.length - 1]); // color palette indexes range
 
   // Create bar chart with defined padding
-  barGroup.selectAll("rect")
+  chart_group.selectAll("rect")
     .data(values)
     .enter()
     .append("rect")
@@ -69,12 +69,12 @@ chart_data_promise.then(result => {
 
   // Adding value percentage label inside each bar's base
   // NOTE: selectAll("text") => this wont work because when adding the bar text labels, it will interfere, taht is hwy use ".id" label. 
-  barGroup.selectAll(".value-percentage-label")
+  chart_group.selectAll(".value-percentage-label")
     .data(values)
     .enter()
     .append("text")
     .attr("class", "value-percentage-label")
-    .text(function (val) { return val+"%"; })
+    .text(function (val) { return Math.round(val)+"%"; })
     .attr("x", function (val) { return 7; }) // Add left padding to number text
     .attr("y", function (val, idx) { return idx * 43 + 25; }) // Add vertical padding to display text in middle of the bar.
     .style("font-size", "23px")
@@ -82,15 +82,72 @@ chart_data_promise.then(result => {
     .style("fill", "white");
 
   // Adding text label for each bar
-  barGroup.selectAll(".bar-text-label")
+  chart_group.selectAll(".bar-text-label")
     .data(names)
     .enter()
     .append("text")
     .attr("class", "bar-text-label")
     .text(function (val) { return val; })
-    .attr("x", function (val,idx) { return (1.5*(max_bar_width*(values[idx]/100)) + (10) ); }) // Get bar's max (width) location, and add padding of 10 units
+    .attr("x", function (val,idx) { return (1.48*(max_bar_width*(values[idx]/100)) + (10) ); }) // Get bar's max (width) location, and add padding of 10 units
     .attr("y", function (val, idx) { return idx * 43 + 24; }) // Add vertical padding to display text in middle of the bar.
     .style("font-size", "18px")
     .style("font-weight", "bold")
     .style("fill", secondary_text_color_accent);
+
+  // Adding interactivity to bars
+
+  chart_group.selectAll("rect, .value-percentage-label")
+    
+    .on("mouseover", function (data) {
+      
+      // bars: add border when mouse hovered on that bar
+      chart_group.selectAll("rect")
+        .filter(function (val) {
+          // console.log(data.toElement.__data__);
+          return val === data.toElement.__data__;
+        })
+        .attr("stroke","black") // Almost gray-black  (not pure)
+        .attr("stroke-width", 1);
+      
+        // select all the bar-text-labels id texts & increase font size, make the text bold, and change color to black.
+        chart_group.selectAll(".bar-text-label")
+          // Match those label which corresponds to the hovered over bar
+          .filter(function (val) {
+              //             get name[] indexed at its corresponding value[]
+              return val === names[values.indexOf(data.toElement.__data__)];
+          })
+          .style("font-size", "19px")
+          .style("fill", "black")
+          .style("font-weight", "bold");
+        
+        // select all value-percentage-labels matching the label on the bar.
+        // increase font size, underline text, bold the text & set color as black
+        chart_group.selectAll(".value-percentage-label")
+          .filter(function (val) {
+              return val === data.toElement.__data__;
+          })
+          .style("font-size", "24px")
+          .attr("text-decoration", "underline")
+          .style("font-weight", "bold")
+          .style("fill", "black");
+      })
+  
+    // Upon losing focus
+    .on("mouseout", function (data) {
+      // select all bars and reset to original attribute
+      chart_group.selectAll("rect")
+        .attr("stroke","none")
+        .attr("stroke-width", 0);
+
+      // Restore font attributes to original for all bar text labels. 
+      chart_group.selectAll(".bar-text-label")
+        .style("font-size", "18px")
+        .style("fill",secondary_text_color_accent);
+      
+      // Restore font attributes for all the percentage labels.
+      chart_group.selectAll(".value-percentage-label")
+        .attr("text-decoration", "")
+        .style("font-size", "23px")
+        .style("fill", "white");
+    });
 });
