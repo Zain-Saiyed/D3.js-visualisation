@@ -2,7 +2,7 @@
 
 ## Overview:
 
-
+D3 visualisation dashboard containing following charts: doughnut, bar, and radar charts. 
 
 | Description | URL|
 | -- | -- |
@@ -19,6 +19,7 @@ D3.js-visualisation/
 └───Code/
     ├───assets/
     ├───css/
+    ├───payload-data/
     └───js/
         ├───svg-charts/
         └───utils/
@@ -29,7 +30,8 @@ D3.js-visualisation/
 1. `Code/` : Main directory containing the entire code base.
 2. `assets/`: contains the static image assets/files used in the d3 visualistion dashbaord.
 3. `css/`: contains the css files used in the project.
-4. `js/`: contains all the javascript files used for visualising the d3 svg(s), legends, and texts.
+4. `payload-data`: contains data for the charts.
+5. `js/`: contains all the javascript files used for visualising the d3 svg(s), legends, and texts.
 
     a. `svg-charts/`: conatins the javascript files which create the multiple visualisations on the canvas.
     

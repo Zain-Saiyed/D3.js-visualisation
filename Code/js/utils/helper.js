@@ -1,3 +1,13 @@
+// Load json file
+function load_json_file(file_name, persist_data) {
+  return fetch("payload-data/"+file_name)
+  .then(response => response.json())
+  .then(data => {
+    // console.log(data);
+    return data;
+  })
+  .catch(error => console.error('[*error*] File Not found!: ',error));
+}
 
 // Function to display image along with text in the middle of the image
 function display_image_single_text(svg, image_path, x, y, text, font_size, font_weight, text_color) {
@@ -71,8 +81,9 @@ function create_doughnut_chart_7(svg, value, label, chart_num, base_pie, base_ar
   var chart_group = svg.append("g")
     .attr("transform", "translate(" + 100 + "," + 100 + ")"); // As 0,0 of svg is set, moving/translating the doughnut chart to make it completely visible on svg canavs.
 
+  var padding = 0.5;
   // All Arc pieces data with padding for more visual clarity 
-  var all_arc_pieces = [value-1, 1, (100-value)-1, 1]; // 1 is padding
+  var all_arc_pieces = [value-padding, padding, (100-value)-padding, padding]; // 0.5 is padding
 
   // Add in the arc pieces information                                                       ### NOT YET DISPLAYED ON SCREEN 
   var pie_chart_arcs = chart_group.selectAll(".arc-"+chart_num)  // Add id for easy identification & debugging. 
@@ -109,7 +120,9 @@ function create_doughnut_chart_7(svg, value, label, chart_num, base_pie, base_ar
 }
 
 
-function create_circle_chart_8(svg, value, label, chart_num, base_pie, base_arc, chart_outline_color_accent, x, y, inner_text_font_size, inner_text_font_weight, inner_text_font_color, chart_label_font_size, chart_label_font_weight, chart_label_font_color, outer_chart_radius) {
+function create_circle_chart_8(svg, value, label, chart_num, base_pie_gen, base_arc_gen, 
+  pie_colors, x, y, inner_text_font_size, inner_text_font_weight, inner_text_font_color,
+  chart_label_font_size, chart_label_font_weight, chart_label_font_color, outer_chart_radius, color_scale) {
   // Create a group for each of the (single unit) doughnut charts - (chart 8)
   var chart_group = svg.append("g")
     .attr("transform", "translate(" + 100 + "," + 100 + ")"); // As 0,0 of svg is set, moving/translating the doughnut chart to make it completely visible on svg canavs.
@@ -118,15 +131,15 @@ function create_circle_chart_8(svg, value, label, chart_num, base_pie, base_arc,
   var all_arc_pieces = [value]; // 1 is padding
 
   // Add in the arc pieces information                                                       ### NOT YET DISPLAYED ON SCREEN 
-  var pie_chart_arcs = chart_group.selectAll(".arc-"+chart_num)  // Add id for easy identification & debugging. 
-    .data(base_pie(all_arc_pieces))
+  var pie_chart_arcs = chart_group.selectAll(".arc-chart-8")  // Add id for easy identification & debugging. 
+    .data(base_pie_gen(all_arc_pieces))
     .enter()
     .append("g")
-    .attr("class", "arc-"+chart_num);
+    .attr("class", "arc-chart-8");
   
   // Add in the path element for each of the arcs to visualise them.  
   pie_chart_arcs.append("path")
-    .attr("d", base_arc)
+    .attr("d", base_arc_gen)
     // .attr("fill", chart_outline_color_accent );
     .attr("fill", function (val, idx) { return pie_colors[Math.ceil(color_scale(val.data))]; }); // Map Colors from palette
 
@@ -145,9 +158,12 @@ function create_circle_chart_8(svg, value, label, chart_num, base_pie, base_arc,
   // Display label below the chart
   chart_group.append("text")
   .text(label)
+  .attr("class","chart8-label")
   .attr("y", outer_chart_radius+20+10)
   .style("font-size", chart_label_font_size)
   .style("font-weight", chart_label_font_weight)
   .style("text-anchor", "middle")
   .style("fill", chart_label_font_color);
+
+  return chart_group;
 }

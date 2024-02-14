@@ -1,0 +1,13 @@
+[
+    {
+        "chart_data":[
+            { "domain": "Big Data Analytics", "value": 38 },
+            { "domain": "Public Cloud", "value": 18 },
+            { "domain": "Blockchain", "value": 7 },
+            { "domain": "3D Printing", "value": 1 },
+            { "domain": "IoT", "value": 14 },
+            { "domain": "AR/VR", "value": 2 },
+            { "domain": "AI/Machine Learning/Cognitive", "value": 20 }
+          ]
+    }
+]
